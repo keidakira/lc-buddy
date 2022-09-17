@@ -1,0 +1,5 @@
+# Hidden folder
+.*/
+.DS_Store
+
+*.zip
