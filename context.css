@@ -1,0 +1,27 @@
+button.custom-btn {
+    color: #90a4ae;
+    background: #ffffff;
+    font-size: 12px;
+    padding: 4px 8px;
+    border: 1px solid #cfd8dc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button.active {
+    color: #455a64;
+    border-color: #b0bec5;
+    background: #eceff1;
+}
+
+select#reminder-days {
+    border: 1px solid #c1c1c1;
+    border-radius: 4px;
+    font-size: 12px;
+    padding: 1px 2px;
+}
+
+select#reminder-days:active,
+select#reminder-days:focus {
+    outline: none;
+}

@@ -17,8 +17,19 @@
       "matches": [
         "https://leetcode.com/problems/*"
       ],
+      "css": [
+        "context.css"
+      ],
       "js": [
         "context.js"
+      ]
+    },
+    {
+      "matches": [
+        "https://leetcode.com/problemset/*"
+      ],
+      "js": [
+        "home.js"
       ]
     }
   ],
