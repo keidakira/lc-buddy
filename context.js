@@ -81,6 +81,16 @@ const addToReminders = (problemSlug, days) => {
     localStorage.setItem("reminders", JSON.stringify(reminders));
 }
 
+const removeFromReminders = (problemSlug) => {
+    let reminders = JSON.parse(localStorage.getItem("reminders"));
+
+    if (problemSlug in reminders) {
+        delete reminders[problemSlug];
+
+        localStorage.setItem("reminders", JSON.stringify(reminders));
+    }
+}
+
 const getRemainingDaysForProblem = (problemSlug) => {
     const reminders = JSON.parse(localStorage.getItem("reminders"));
     const today = new Date();
@@ -242,6 +252,8 @@ window.onload = () => {
                         });
 
                         dontRemindMeButton.addEventListener('click', () => {
+                            removeFromReminders(problemSlug);
+
                             remindMeButton.classList.remove("active");
                             dontRemindMeButton.classList.add("active");
                         })

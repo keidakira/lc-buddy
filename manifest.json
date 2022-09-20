@@ -6,9 +6,6 @@
   "background": {
     "service_worker": "background.js"
   },
-  "permissions": [
-    "scripting"
-  ],
   "host_permissions": [
     "https://leetcode.com/"
   ],
@@ -26,7 +23,8 @@
     },
     {
       "matches": [
-        "https://leetcode.com/problemset/*"
+        "https://leetcode.com/problemset/*",
+        "https://leetcode.com/explore/*"
       ],
       "js": [
         "home.js"
