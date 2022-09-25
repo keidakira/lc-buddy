@@ -8,7 +8,7 @@ const getAllRemindersToday = () => {
 
     let problems = []
 
-    for(let problem in reminders) {
+    for (let problem in reminders) {
         let d = new Date(reminders[problem]);
 
         if (d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate()) {
@@ -49,27 +49,28 @@ reminderPara.style.textAlign = 'center';
 reminderPara.style.color = 'white';
 reminderPara.style.margin = '0';
 
+let res = getAllRemindersToday().map(r => {
+    let parts = r.split("-");
+    parts = parts.map(p => {
+        return p[0].toUpperCase() + p.substring(1)
+    });
+
+    let title = parts.join(" ");
+    console.log(parts, r, title)
+    let url = "https://leetcode.com/problems/" + r;
+
+    return `<li class="p-2 mt-2">
+                        <a href="${url}" target="_blank">${title}</a>
+                    </li>`;
+});
+
 let questionsPopupHTML = `
 <div id="lc-buddy-popup" style="background-color: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; z-index: 9999;">
     <div style="position: relative; width: 480px; height: 60vh; padding: 16px; border-radius: 4px; background-color: white; color: black;">
         <p style="text-align: center; color: black; margin: 8px; font-size: 16px;">Problems to do today!</p>
         <hr >
         <ul class="m-0 p-0">
-            ${
-                getAllRemindersToday().map(r => {
-                    let parts = r.split("-");
-                    parts = parts.map(p => {
-                        return p[0].toUpperCase() + p.substring(1)
-                    });
-                    
-                    let title = parts.join(" ");
-                    let url = "https://leetcode.com/problems/" + r;
-
-                    return `<li class="p-2 mt-2">
-                        <a href="${url}" target="_blank">${title}</a>
-                    </li>`;
-                })
-            }
+        ${res.join('')}
         </ul>
         <div style="position: absolute; bottom: 8px; width: calc(100% - 32px);">
             <hr >
