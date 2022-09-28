@@ -4,15 +4,29 @@
     <meta charset="UTF-8">
     <title>LC Buddy</title>
     <link rel="stylesheet" href="info.style.css">
+    <link rel="stylesheet" href="spinner.css">
 </head>
 <body>
-    <h2>Here, you can find all your LeetCode info</h2>
-    <div class="main">
+<div id="spinner">
+    <div class="lds-ellipsis">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>
+<div class="main">
+    <div>
+        <div class="today-submission-count">
+            <p>Problems you solved today</p>
+            <h2 id="problems-solved-today"></h2>
+        </div>
         <div class="submission-count">
             <p>All the problems solved</p>
         </div>
-        <div class="latest-submissions"></div>
     </div>
+    <div class="latest-submissions"></div>
+</div>
 </body>
 <script src="data.js"></script>
 </html>

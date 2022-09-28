@@ -108,10 +108,54 @@ const requestOptions = {
         submissionsDIV.appendChild(d);
     });
 
-    response = await fetch("https://leetcode.com/graphql", {
+    let recentSubmissions = []
+
+    response = await fetch(`https://leetcode.com/api/submissions/?offset=0&limit=20`, {
         ...requestOptions,
-        body: getUserLastNSubmission(10, username)
+        method: "GET"
     }).then(res => res.json());
 
-    console.log(response);
+    recentSubmissions = response.submissions_dump;
+
+    let todaySubmissions = [];
+    let todaySubmissionsHTML = ``;
+    let seenSubmissions = new Set();
+    let today = new Date();
+    let todayDate = `${today.getMonth()}-${today.getDate()}-${today.getFullYear()}`;
+
+    recentSubmissions.forEach(s => {
+        if (s.status_display === "Accepted") {
+            let date = new Date(s.timestamp * 1000);
+            let currDate = `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`;
+
+            if (currDate === todayDate && !(seenSubmissions.has(s.title_slug))) {
+                todaySubmissions.push(s)
+                seenSubmissions.add(s.title_slug);
+
+                todaySubmissionsHTML += `
+                <div class="recent-submission">
+                    <div class="name">
+                        <a href="https://leetcode.com/problems/${s.title_slug}" target="_blank">
+                            <h3>${s.title}</h3>
+                        </a>
+                        <small>${s.time} ago</small>
+                    </div>                
+                    <div class="link">
+                        <a href="https://leetcode.com${s.url}" target="_blank">View</a>                    
+                    </div>
+                </div>
+                `;
+            }
+        }
+    });
+
+    console.log(todaySubmissions);
+    const problemsSolvedH2 = document.getElementById("problems-solved-today");
+    problemsSolvedH2.innerText = `${todaySubmissions.length}`;
+
+    const latestSubmissionsDIV = document.getElementsByClassName("latest-submissions")[0];
+    latestSubmissionsDIV.innerHTML = todaySubmissionsHTML;
+
+    document.getElementById("spinner").style.display = 'none';
+    document.getElementsByClassName("main")[0].style.display = 'grid';
 })();

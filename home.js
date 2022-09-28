@@ -1,6 +1,9 @@
 const getAllRemindersToday = () => {
     const reminders = JSON.parse(localStorage.getItem("reminders"));
     const today = new Date();
+    const date = `${today.getMonth()+1}-${today.getDate()}-${today.getFullYear()}`;
+    const tomorrow = new Date(date).getTime() + 86400_000;
+
 
     if (reminders === null || reminders === undefined) {
         return []
@@ -10,8 +13,9 @@ const getAllRemindersToday = () => {
 
     for (let problem in reminders) {
         let d = new Date(reminders[problem]);
+        let dTime = d.getTime();
 
-        if (d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate()) {
+        if (dTime < tomorrow) {
             problems.push(problem);
         }
     }
@@ -56,12 +60,11 @@ let res = getAllRemindersToday().map(r => {
     });
 
     let title = parts.join(" ");
-    console.log(parts, r, title)
     let url = "https://leetcode.com/problems/" + r;
 
     return `<li class="p-2 mt-2">
-                        <a href="${url}" target="_blank">${title}</a>
-                    </li>`;
+                <a href="${url}" target="_blank">${title}</a>
+            </li>`;
 });
 
 let questionsPopupHTML = `

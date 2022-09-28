@@ -1,16 +1,28 @@
-.main {
-    display: grid;
-    grid-template-columns: 30% 70%;
-    grid-template-rows: auto;
-    grid-column-gap: 4px;
+body {
+    padding: 64px;
 }
 
+.main {
+    display: none;
+    grid-template-columns: 30% auto;
+    grid-template-rows: auto;
+    grid-column-gap: 16px;
+}
+
+.today-submission-count,
 .submission-count {
     padding: 8px;
-    border: 1px solid #c1c1c1;
+    border: 1px solid #e1e1e1;
     border-radius: 4px;
+    margin-bottom: 16px;
 }
 
+.today-submission-count h2 {
+    font-size: 48px;
+    margin: 0;
+}
+
+.today-submission-count > p,
 .submission-count > p {
     margin-top: 0;
     font-weight: 500;
@@ -40,9 +52,33 @@
 }
 
 .latest-submissions {
-    border: 1px solid #c1c1c1;
+    border: 1px solid #e1e1e1;
     padding: 8px;
     border-radius: 4px;
+}
+
+.latest-submissions .recent-submission h3 {
+    margin: 0;
+}
+
+.latest-submissions .recent-submission {
+    padding: 8px;
+    background-color: #f1f1f1;
+    margin-bottom: 12px;
+    border-radius: 4px;
+    color: rgb(117, 117, 117);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.latest-submissions .recent-submission a  {
+    color: cornflowerblue;
+    text-decoration: none;
+}
+
+.latest-submissions .recent-submission:last-child {
+    margin: 0;
 }
 
 .meter {
