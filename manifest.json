@@ -1,34 +1,24 @@
 {
   "name": "LC Buddy",
   "description": "An extension to smartly prepare LeetCode questions",
-  "version": "1.0",
+  "version": "1.1",
   "manifest_version": 3,
   "background": {
     "service_worker": "background.js"
   },
-  "host_permissions": [
-    "https://leetcode.com/"
-  ],
+  "host_permissions": ["https://leetcode.com/"],
   "content_scripts": [
     {
-      "matches": [
-        "https://leetcode.com/problems/*"
-      ],
-      "css": [
-        "context.css"
-      ],
-      "js": [
-        "context.js"
-      ]
+      "matches": ["https://leetcode.com/problems/*"],
+      "css": ["context.css"],
+      "js": ["context.js"]
     },
     {
       "matches": [
         "https://leetcode.com/problemset/*",
         "https://leetcode.com/explore/*"
       ],
-      "js": [
-        "home.js"
-      ]
+      "js": ["home.js"]
     }
   ],
   "action": {
