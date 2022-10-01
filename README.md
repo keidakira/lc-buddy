@@ -4,11 +4,8 @@
 - This helps you understand the time you took to read and solve a problem, which is a smart way of learning and improving.
 
 ## How to install it?
-It can be done in 5 simple steps
-- Clone the repo using ```git clone https://github.com/keidakira/lc-buddy.git```
-- Open Chrome, click on three dots in the top right corner, and select More Tools -> Extensions
-- Then, turn on "Developer Mode" in the top-right corner
-- You'll see an option called "Load Unpacked" in the top-left corner
-- Click it, and upload the cloned repo, and you're done!
+It can be done in 2 simple steps (**Make sure you are in Google Chrome**)
+- Go to https://chrome.google.com/webstore/detail/lc-buddy/mieiclmghgmddjalhjmkgoapildpdejn and click "Add to Chrome"
+- Install it and boom!
 
 Thanks for using it! All the best for your interviews!
