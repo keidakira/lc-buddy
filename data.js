@@ -1,9 +1,12 @@
 const myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
-myHeaders.append("Cookie", "csrftoken=lJgSuPoBz9QCAKavbvC2KyFBtgmTNskE5sKpZEa7Kwfl5lj6VXEGePoftbfxmRDu");
+myHeaders.append(
+  "Cookie",
+  "csrftoken=lJgSuPoBz9QCAKavbvC2KyFBtgmTNskE5sKpZEa7Kwfl5lj6VXEGePoftbfxmRDu"
+);
 
 const getLoggedInUser = JSON.stringify({
-    query: `
+  query: `
     query globalData {
         userStatus {
             userId
@@ -14,12 +17,12 @@ const getLoggedInUser = JSON.stringify({
             avatar
         }
     }    
-    `
-})
+    `,
+});
 
 const getUserSubmissionCount = (username) => {
-    return JSON.stringify({
-        query: `
+  return JSON.stringify({
+    query: `
             query userProblemsSolved($username: String!) {
                 allQuestionsCount {
                     difficulty
@@ -40,15 +43,15 @@ const getUserSubmissionCount = (username) => {
                 }
             }
         `,
-        variables: {
-            "username": username
-        }
-    });
-}
+    variables: {
+      username: username,
+    },
+  });
+};
 
 const getUserLastNSubmission = (N, username) => {
-    return JSON.stringify({
-        query: `
+  return JSON.stringify({
+    query: `
     query recentAcSubmissions($username: String!, $limit: Int!) {
         recentAcSubmissionList(username: $username, limit: $limit) {
             id
@@ -58,81 +61,98 @@ const getUserLastNSubmission = (N, username) => {
         }
     }
     `,
-        variables: {
-            "username": username,
-            "limit": N
-        }
-    });
-}
+    variables: {
+      username: username,
+      limit: N,
+    },
+  });
+};
 
 const requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    redirect: 'follow'
+  method: "POST",
+  headers: myHeaders,
+  redirect: "follow",
 };
 
 (async () => {
-    let response = await fetch("https://leetcode.com/graphql", {
-        ...requestOptions,
-        body: getLoggedInUser
-    })
-        .then(response => response.json())
-        .catch(error => console.log('error', error));
+  let response = await fetch("https://leetcode.com/graphql", {
+    ...requestOptions,
+    body: getLoggedInUser,
+  })
+    .then((response) => response.json())
+    .catch((error) => console.log("error", error));
 
-    const username = response.data.userStatus.username;
+  const username = response.data.userStatus.username;
 
-    response = await fetch("https://leetcode.com/graphql", {
-        ...requestOptions,
-        body: getUserSubmissionCount(username)
-    }).then(res => res.json());
+  response = await fetch("https://leetcode.com/graphql", {
+    ...requestOptions,
+    body: getUserSubmissionCount(username),
+  }).then((res) => res.json());
 
-    const submissions = response.data.matchedUser.submitStatsGlobal.acSubmissionNum;
-    const allQuestions = response.data.allQuestionsCount;
+  const submissions =
+    response.data.matchedUser.submitStatsGlobal.acSubmissionNum;
+  const allQuestions = response.data.allQuestionsCount;
 
-    const submissionsDIV = document.getElementsByClassName("submission-count")[0];
+  const submissionsDIV = document.getElementsByClassName("submission-count")[0];
 
-    submissions.forEach((s, index) => {
-        let d = document.createElement("DIV");
-        d.innerHTML = `
+  submissions.forEach((s, index) => {
+    let d = document.createElement("DIV");
+    d.innerHTML = `
         <div class="info">
             <div>
                 <span>${s.difficulty}</span>
                 <span>${s.count} / ${allQuestions[index].count}</span>
             </div>
             <div class="meter ${s.difficulty.toLowerCase()}">
-                <p style="width: ${s.count * 100 / allQuestions[index].count}%"></p>            
+                <p style="width: ${
+                  (s.count * 100) / allQuestions[index].count
+                }%"></p>            
             </div>
         </div>
         `;
 
-        submissionsDIV.appendChild(d);
-    });
+    submissionsDIV.appendChild(d);
+  });
 
-    let recentSubmissions = []
+  let recentSubmissions = [];
 
-    response = await fetch(`https://leetcode.com/api/submissions/?offset=0&limit=20`, {
-        ...requestOptions,
-        method: "GET"
-    }).then(res => res.json());
+  response = await fetch(
+    `https://leetcode.com/api/submissions/?offset=0&limit=20`,
+    {
+      ...requestOptions,
+      method: "GET",
+    }
+  ).then((res) => res.json());
 
-    recentSubmissions = response.submissions_dump;
+  recentSubmissions = response.submissions_dump;
 
-    let todaySubmissions = [];
-    let todaySubmissionsHTML = ``;
-    let seenSubmissions = new Set();
-    let today = new Date();
-    let todayDate = `${today.getMonth()}-${today.getDate()}-${today.getFullYear()}`;
+  response = await fetch(
+    `https://leetcode.com/api/submissions/?offset=20&limit=20`,
+    {
+      ...requestOptions,
+      method: "GET",
+    }
+  ).then((res) => res.json());
 
-    recentSubmissions.forEach(s => {
-        if (s.status_display === "Accepted") {
-            let date = new Date(s.timestamp * 1000);
-            let currDate = `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`;
+  recentSubmissions = recentSubmissions.concat(response.submissions_dump);
 
-            if (currDate === todayDate && !(seenSubmissions.has(s.title_slug))) {
-                todaySubmissions.push(s)
-                seenSubmissions.add(s.title_slug);
+  let todaySubmissions = [];
+  let todaySubmissionsHTML = ``;
+  let seenSubmissions = new Set();
+  let today = new Date();
+  let todayDate = `${today.getMonth()}-${today.getDate()}-${today.getFullYear()}`;
 
-                todaySubmissionsHTML += `
+  try {
+    recentSubmissions.forEach((s) => {
+      if (s.status_display === "Accepted") {
+        let date = new Date(s.timestamp * 1000);
+        let currDate = `${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`;
+
+        if (currDate === todayDate && !seenSubmissions.has(s.title_slug)) {
+          todaySubmissions.push(s);
+          seenSubmissions.add(s.title_slug);
+
+          todaySubmissionsHTML += `
                 <div class="recent-submission">
                     <div class="name">
                         <a href="https://leetcode.com/problems/${s.title_slug}" target="_blank">
@@ -145,17 +165,21 @@ const requestOptions = {
                     </div>
                 </div>
                 `;
-            }
         }
+      }
     });
+  } catch (e) {
+    window.location.reload();
+  }
 
-    console.log(todaySubmissions);
-    const problemsSolvedH2 = document.getElementById("problems-solved-today");
-    problemsSolvedH2.innerText = `${todaySubmissions.length}`;
+  console.log(todaySubmissions);
+  const problemsSolvedH2 = document.getElementById("problems-solved-today");
+  problemsSolvedH2.innerText = `${todaySubmissions.length}`;
 
-    const latestSubmissionsDIV = document.getElementsByClassName("latest-submissions")[0];
-    latestSubmissionsDIV.innerHTML = todaySubmissionsHTML;
+  const latestSubmissionsDIV =
+    document.getElementsByClassName("latest-submissions")[0];
+  latestSubmissionsDIV.innerHTML = todaySubmissionsHTML;
 
-    document.getElementById("spinner").style.display = 'none';
-    document.getElementsByClassName("main")[0].style.display = 'grid';
+  document.getElementById("spinner").style.display = "none";
+  document.getElementsByClassName("main")[0].style.display = "grid";
 })();
